@@ -1,6 +1,8 @@
 import EventEmitter from "eventemitter3";
 import Beat from "./Beat";
 
+const lyrics = ["Ah", "ha", "ha", "ha", "stayin' alive", "stayin' alive"];
+let count = 0;
 export default class Application extends EventEmitter {
   static get events() {
     return {
@@ -10,14 +12,12 @@ export default class Application extends EventEmitter {
 
   constructor() {
     super();
-
-    const lyrics = ["Ah", "ha", "ha", "ha", "stayin' alive", "stayin' alive"];
-    let count = 0;
-
     this._beat = new Beat();
-    this._beat.on(Beat.events.BIT, _create);
+    this._beat.on(Beat.events.BIT, this._create);
+    this.emit(Application.events.READY);
+  }
 
-    function _create() {
+    _create(){
       const message = document.createElement("div");
       message.classList.add("message");
       message.innerText = lyrics[count];
@@ -27,7 +27,5 @@ export default class Application extends EventEmitter {
         count = 0;
       }
     }
-
-    this.emit(Application.events.READY);
-  }
+ 
 }
