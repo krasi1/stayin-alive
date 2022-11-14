@@ -10,27 +10,23 @@ export default class Application extends EventEmitter {
 
   constructor() {
     super();
-    this._beat = new Beat();
 
     const lyrics = ["Ah", "ha", "ha", "ha", "stayin' alive", "stayin' alive"];
     let count = 0;
 
-    document.addEventListener(Beat.events.BIT, function _create() {
-      console.log("hi");
+    this._beat = new Beat();
+    this._beat.on(Beat.events.BIT, _create);
+
+    function _create() {
       const message = document.createElement("div");
       message.classList.add("message");
       message.innerText = lyrics[count];
       document.querySelector(".main").appendChild(message);
-      if(count > lyrics.length)
-      {
+      count++;
+      if (count >= lyrics.length) {
         count = 0;
       }
-      count++;   
-    });
-
-      
-
-    
+    }
 
     this.emit(Application.events.READY);
   }
